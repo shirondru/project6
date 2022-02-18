@@ -143,8 +143,9 @@ class LogisticRegression(BaseRegressor):
         Returns: 
             y_pred for given X
         """
-
-        y_pred = 1/(np.exp(-self.W.dot(X)))
+        if X.shape[1] == self.num_feats:
+            X = np.hstack([X, np.ones((X.shape[0], 1))])
+        y_pred = 1/(np.exp(-self.W.dot(X))).flatten()
         return y_pred
 
 
