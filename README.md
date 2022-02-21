@@ -1,4 +1,6 @@
 # Project 6
+![BuildStatus](https://github.com/shirondru/Project6/actions/workflows/pytest.yml/badge.svg?event=push)
+
 Logistic regression and application to medical record data
 
 # Assignment
