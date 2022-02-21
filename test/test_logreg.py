@@ -19,7 +19,7 @@ def test_expected_loss():
     """
 
     X_train, X_test, y_train, y_test = loadDataset(split_percent = 0.7)
-    lin_model = LogisticRegression(num_feats=6, max_iter=1000, tol=0.000001, learning_rate=0.001, batch_size=400,random_seed = 42) #set random seed
+    lin_model = LogisticRegression(num_feats=6, max_iter=1000, tol=0.000001, learning_rate=0.001, batch_size=400,random_state = 42) #set random seed
     lin_model.train_model(X_train, y_train, X_test, y_test)
     assert lin_model.loss_history_val[-1] == 0.6808438002254648, "Your final loss value is different than expected!"
 
@@ -29,7 +29,7 @@ def test_loss():
     will approach 0 as number of gradient descent itertions increases. Test that is the case
     """
     X_train, X_test, y_train, y_test = loadDataset(split_percent = 0.7)
-    model = LogisticRegression(num_feats=6, max_iter=1000, tol=0.000001, learning_rate=0.001, batch_size=400)
+    model = LogisticRegression(num_feats=6, max_iter=10000, tol=0.000001, learning_rate=0.001, batch_size=400)
     model.train_model(X_train, y_train, X_test, y_test)
     num_training_iters  = len(model.loss_history_train)
     early_losses = model.loss_history_train[0:(num_training_iters // 3)] #loss history from first 1/3 of data
