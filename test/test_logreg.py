@@ -14,15 +14,15 @@ More details on potential tests below, these are not exhaustive
 
 
 def test_updates():
-	"""
+    """
 
-	"""
-	
-	# Check that your loss function is correct and that 
-	# you have reasonable losses at the end of training
+    """
+
+    # Check that your loss function is correct and that 
+    # you have reasonable losses at the end of training
 
 
-	pass
+    pass
 def test_expected_loss():
     """
     Because a random seed is used, the weight initialization, batch shuffling, and all other pseudo-random events should be reproducible. This test tests
@@ -35,11 +35,11 @@ def test_expected_loss():
     assert lin_model.loss_history_val[-1] == 0.6808438002254648, "Your final loss value is different than expected!"
 
 def test_loss():
-	"""
-	Because the loss is being minimized, via gradient descent, using the training data, it is expected that the loss (with respect to the training data)
-	will approach 0 as number of gradient descent itertions increases. Test that is the case
-	"""
-	X_train, X_test, y_train, y_test = loadDataset(split_percent = 0.7)
+    """
+    Because the loss is being minimized, via gradient descent, using the training data, it is expected that the loss (with respect to the training data)
+    will approach 0 as number of gradient descent itertions increases. Test that is the case
+    """
+    X_train, X_test, y_train, y_test = loadDataset(split_percent = 0.7)
     model = LogisticRegression(num_feats=6, max_iter=1000, tol=0.000001, learning_rate=0.001, batch_size=400)
     model.train_model(X_train, y_train, X_test, y_test)
     num_training_iters  = len(model.loss_history_train)
@@ -47,14 +47,14 @@ def test_loss():
     middle_losses = model.loss_history_train[(num_training_iters // 3): 2 * (num_training_iters // 3)] # loss history from second 1/3 of data 
     late_losses = model.loss_history_train[ 2 * (num_training_iters // 3):] #loss history from last 1/3 of data
 
-	assert that np.mean(early_losses) < np.mean(middle_losses) < np.mean(late_losses), "Your loss is not approaching 0!"
+    assert that np.mean(early_losses) < np.mean(middle_losses) < np.mean(late_losses), "Your loss is not approaching 0!"
 
 def test_loss_calculation():
-	"""
-	Given a small set of data and parameters, test the loss is calculated correctly by comparing the loss computed by the Class Object (in a vectorized way)
+    """
+    Given a small set of data and parameters, test the loss is calculated correctly by comparing the loss computed by the Class Object (in a vectorized way)
     to the loss computed in this function via a for loop, to the loss I calculated by hand. All 3 values should be identical. Assert that is the case
-	"""
-    
+    """
+
 
     X = np.array([[0.4,0.3,1],
                 [0.1,0.9,1],
@@ -79,7 +79,7 @@ def test_loss_calculation():
     assert np.allclose(model_loss_val, loss, manually_calculated_loss), "Loss function is not being calculated correctly!"
 
 
-	
+
 
 def test_grad_calc():
     """
@@ -87,7 +87,7 @@ def test_grad_calc():
     manually initialized parameters. Also compare it to the output from a non-vectorized calculation. 
     """
 
-	X = np.array([[0.4,0.3,1],
+    X = np.array([[0.4,0.3,1],
                 [0.1,0.9,1],
                 [0.2,0.8,1]]) #last column is for bias term
     lin_model = LogisticRegression(num_feats=2)
@@ -143,10 +143,10 @@ def test_predict_calculation():
     assert np.allclose(model_y_pred,manually_calc_pred) "Class Predictions are not being calculated as expected!"
 
 def test_predict():
-	# Check that self.W is being updated as expected
-	# and produces reasonable estimates for NSCLC classification
+    # Check that self.W is being updated as expected
+    # and produces reasonable estimates for NSCLC classification
 
-	# Check accuracy of model after training
+    # Check accuracy of model after training
 
     """
     Because a seed is set, hyperparameters fixed, and the initialization of W is also set, all predictions for a given dataset should be reproducible.
