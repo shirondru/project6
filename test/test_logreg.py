@@ -140,7 +140,19 @@ def test_predict():
 
 	# Check accuracy of model after training
 
-def test_classification_ability():
+def test_classification_accuracy():
+    """
+    Because a seed is set, hyperparameters fixed, and the initialization of W is also set, all predictions for a given dataset should be reproducible.
+    Additionally, beacase the gradient, loss, and prediction functions are tested to be calculated properly, the predictions for a given dataset should also have an expected value.
+    Here, I test the classification accuracy of the logistic regression model on the NSCLC dataset is the expected value
+    """
 
+    X_train, X_test, y_train, y_test = loadDataset(split_percent = 0.8)
+    lin_model = LogisticRegression(num_feats=X_train.shape[1], max_iter=10000, tol=0.000001, learning_rate=0.001, batch_size=400,random_state = 42)
+    lin_model.train_model(X_train, y_train, X_test, y_test)
+    y_pred = lin_model.make_prediction(X_test)
+    y_pred[y_pred > 0.5] = 1
+    y_pred[y_pred <= 0.5] = 0
+    accuracy = sum(y_pred == y_test)/len(y_test)
+    assert accuracy == 0.795, "Accuracy Score is Different than Expeted!"
 
-	pass
