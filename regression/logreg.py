@@ -109,7 +109,8 @@ class LogisticRegression(BaseRegressor):
         """
         y_pred = self.make_prediction(X)
         m = len(y)
-        grad = ((y - (1 + np.exp(-X.dot(self.W)))**-1).dot(X))/m
+        grad = -((y - y_pred).dot(X))/m
+
         return grad
     def loss_function(self, X, y) -> float:
         """
@@ -128,7 +129,7 @@ class LogisticRegression(BaseRegressor):
 
         y_pred = self.make_prediction(X)
         m = len(y)
-        loss = (-(y.dot(y_pred)) - ((1-y).dot(np.log(y_pred)))/m)
+        loss = ((y.dot(np.log(y_pred))) + ((1-y).dot(np.log(1-y_pred))))* (-1/m)
         return loss
     
     def make_prediction(self, X) -> np.array:
@@ -145,7 +146,7 @@ class LogisticRegression(BaseRegressor):
         """
         if X.shape[1] == self.num_feats:
             X = np.hstack([X, np.ones((X.shape[0], 1))])
-        y_pred = 1/(np.exp(-self.W.dot(X))).flatten()
+        y_pred = 1/(1+(np.exp(-X.dot(self.W)))).flatten()
         return y_pred
 
 
