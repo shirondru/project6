@@ -110,11 +110,18 @@ def test_grad_calc():
 def test_update_W():
     """
     This test tests that the parameters in self.W get updated properly throughout gradient descent. Because the initialization of self.W will be
-    controlled by the random seed, the hyperparameters are fixed, and the calculations of the gradiens, predictions,  and loss functions have been tested, 
-    the self.W updates should be predictable/expected. Here, I assert W is being updated properly throughout gradient descent by checking the final W parameters after
-    training are as expected by checking the final self.W object is as expected 
+    controlled by the random seed, the hyperparameters are fixed, and the calculations of the gradients, predictions,  and loss functions have been tested, 
+    the self.W should be updated in a reproducible/expected manner. Here, I assert self.W is being updated properly throughout gradient descent by testing that the final values of
+    self.W are different from the initial set of self.W values, and that they are the same as the hardcoded expected values. As long as nothing has changed in the calculation of the gradient, predictions, or loss functions, or 
+    that nothing has changed in the gradient descent code or any of the hyperparameters or random seed, this should be true.
     """
-    pass
+    X_train, X_test, y_train, y_test = loadDataset(split_percent = 0.8)
+    lin_model = LogisticRegression(num_feats=X_train.shape[1], max_iter=10000, tol=0.000001, learning_rate=0.001, batch_size=400,random_state = 42)
+    init_w = lin_model.W
+    lin_model.train_model(X_train, y_train, X_test, y_test)
+    final_w = lin_model.W
+    expected_final_w = np.array([ 0.89807518,  0.66200367,  1.06751873,  1.52302986, -0.23415337, -0.06909126,  1.36745666])
+    assert (not np.allclose(init_w, final_w)) and np.allclose(final_w,expected_final_w), "Your final W values are not as expected"
 
 def test_predict_calculation():
     """
@@ -140,11 +147,12 @@ def test_predict():
 
 	# Check accuracy of model after training
 
-def test_classification_accuracy():
     """
     Because a seed is set, hyperparameters fixed, and the initialization of W is also set, all predictions for a given dataset should be reproducible.
     Additionally, beacase the gradient, loss, and prediction functions are tested to be calculated properly, the predictions for a given dataset should also have an expected value.
-    Here, I test the classification accuracy of the logistic regression model on the NSCLC dataset is the expected value
+    Here, I test the classification accuracy of the logistic regression model on the NSCLC dataset is the expected value.
+
+    ** This also tests that the algorithm is able to make good predictions, as this is expected to generate somewhat high classification accuracy **
     """
 
     X_train, X_test, y_train, y_test = loadDataset(split_percent = 0.8)
@@ -155,4 +163,6 @@ def test_classification_accuracy():
     y_pred[y_pred <= 0.5] = 0
     accuracy = sum(y_pred == y_test)/len(y_test)
     assert accuracy == 0.795, "Accuracy Score is Different than Expeted!"
+
+
 
