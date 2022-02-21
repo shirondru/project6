@@ -129,7 +129,7 @@ def test_predict_calculation():
     model_y_pred = lin_model.make_prediction(X)
     manually_calc_pred = np.array([[0.8942587414290022,0.8665739434012857,0.8871545477278288]])
 
-    assert np.allclose(model_y_pred,manually_calc_pred) "Class Predictions are not being calculated as expected!"
+    assert np.allclose(model_y_pred,manually_calc_pred), "Class Predictions are not being calculated as expected!"
 
 def test_predict():
     # Check that self.W is being updated as expected
