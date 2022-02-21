@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 class BaseRegressor():
     def __init__(self, num_feats, learning_rate=0.1, tol=0.001, max_iter=100, batch_size=12,random_state=42):
         # initializing parameters
+        self.random_state = random_state
+        np.random.seed(self.random_state)
         self.W = np.random.randn(num_feats + 1).flatten()
         # assigning hyperparameters
         self.lr = learning_rate
@@ -16,7 +18,7 @@ class BaseRegressor():
         # defining list for storing loss history
         self.loss_history_train = []
         self.loss_history_val = []
-        self.random_state = random_state
+        
         
     def calculate_gradient(self, X, y):
         pass
@@ -72,6 +74,7 @@ class BaseRegressor():
             prev_update_size = np.mean(np.array(update_size_epoch))
             # Updating iteration number
             iteration += 1
+        print(f"Finished training after {iteration} iterations")
     
     def plot_loss_history(self):
         """
@@ -149,9 +152,11 @@ class LogisticRegression(BaseRegressor):
         if X.shape[1] == self.num_feats:
             X = np.hstack([X, np.ones((X.shape[0], 1))])
         y_pred = 1/(1+(np.exp(-X.dot(self.W)))).flatten()
-        return y_pred
-
         
+        #slightly change any predicted probabilities of 0 or 1 to avoid errors in the loss function calculation
+        y_pred[y_pred==0] = 0.00001
+        y_pred[y_pred==1] = 0.99999
+        return y_pred
 
 
 
