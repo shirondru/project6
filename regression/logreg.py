@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 class BaseRegressor():
-    def __init__(self, num_feats, learning_rate=0.1, tol=0.001, max_iter=100, batch_size=12):
+    def __init__(self, num_feats, learning_rate=0.1, tol=0.001, max_iter=100, batch_size=12,random_state=42):
         # initializing parameters
         self.W = np.random.randn(num_feats + 1).flatten()
         # assigning hyperparameters
@@ -16,6 +16,7 @@ class BaseRegressor():
         # defining list for storing loss history
         self.loss_history_train = []
         self.loss_history_val = []
+        self.random_state = random_state
         
     def calculate_gradient(self, X, y):
         pass
@@ -27,6 +28,7 @@ class BaseRegressor():
         pass
     
     def train_model(self, X_train, y_train, X_val, y_val):
+        np.random.seed(self.random_state)
         # Padding data with vector of ones for bias term
         X_train = np.hstack([X_train, np.ones((X_train.shape[0], 1))])
         X_val = np.hstack([X_val, np.ones((X_val.shape[0], 1))])
@@ -92,8 +94,8 @@ class BaseRegressor():
 
 # import required modules
 class LogisticRegression(BaseRegressor):
-    def __init__(self, num_feats, learning_rate=0.1, tol=0.0001, max_iter=100, batch_size=12):
-        super().__init__(num_feats, learning_rate, tol, max_iter, batch_size)
+    def __init__(self, num_feats, learning_rate=0.1, tol=0.0001, max_iter=100, batch_size=12,random_state=42):
+        super().__init__(num_feats, learning_rate, tol, max_iter, batch_size,random_state)
         
     def calculate_gradient(self, X, y) -> np.ndarray:
         """
@@ -148,6 +150,8 @@ class LogisticRegression(BaseRegressor):
             X = np.hstack([X, np.ones((X.shape[0], 1))])
         y_pred = 1/(1+(np.exp(-X.dot(self.W)))).flatten()
         return y_pred
+
+        
 
 
 
