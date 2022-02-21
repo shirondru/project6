@@ -21,7 +21,7 @@ def test_expected_loss():
     X_train, X_test, y_train, y_test = loadDataset(split_percent = 0.7)
     lin_model = LogisticRegression(num_feats=6, max_iter=1000, tol=0.000001, learning_rate=0.001, batch_size=400,random_state = 42) #set random seed
     lin_model.train_model(X_train, y_train, X_test, y_test)
-    assert lin_model.loss_history_val[-1] == 0.5745952593988821, "Your final loss value is different than expected!"
+    assert np.allclose(lin_model.loss_history_val[-1],0.5745952593988821), "Your final loss value is different than expected!"
 
 def test_loss():
     """
