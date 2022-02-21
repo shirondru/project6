@@ -2,6 +2,7 @@ from regression import LogisticRegression
 from regression import loadDataset
 import numpy as np
 import pandas as pd
+import pytest
 
 """
 Write your logreg unit tests here. Some examples of tests we will be looking for include:
