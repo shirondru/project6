@@ -93,6 +93,7 @@ class BaseRegressor():
         axs[0].set_ylabel('Train Loss')
         axs[1].set_ylabel('Val Loss')
         fig.tight_layout()
+        plt.show()
         
 
 # import required modules
