@@ -14,19 +14,22 @@ More details on potential tests below, these are not exhaustive
 
 def test_expected_loss():
     """
-    Because a random seed is used, the weight initialization, batch shuffling, and all other pseudo-random events should be reproducible, the precise final training loss can be expected. This test tests
+    Because a random seed is used, the weight initialization, batch shuffling, and all other pseudo-random events should be reproducible. Therefore, the precise final training loss can be expected. This test tests
     that the final loss at the end of training is what is expected, provided the hyperparameters are fixed and pseudo-random events are controlled through the random seed
     """
 
     X_train, X_test, y_train, y_test = loadDataset(split_percent = 0.7)
     lin_model = LogisticRegression(num_feats=6, max_iter=1000, tol=0.000001, learning_rate=0.001, batch_size=400,random_state = 42) #set random seed
     lin_model.train_model(X_train, y_train, X_test, y_test)
+
+    #test final training loss is approx identical to the expected value under these hyperparameters and random seed
     assert np.allclose(lin_model.loss_history_val[-1],0.5745952593988821), "Your final loss value is different than expected!"
 
 def test_loss():
     """
-    Because the loss is being minimized, via gradient descent, using the training data, it is expected that the loss (with respect to the training data)
-    will approach 0 as number of gradient descent itertions increases. Test that is the case
+    Because the loss is being minimized via gradient descent it is expected that the loss (with respect to the training data)
+    will approach 0 as number of gradient descent iterations increases. Test that is the case by asserting the loss from the 1st third of the data 
+    is greater than the loss from the middle third of the data, which is greater than the loss from the last third of the data.
     """
     X_train, X_test, y_train, y_test = loadDataset(split_percent = 0.7)
     model = LogisticRegression(num_feats=6, max_iter=10000, tol=0.000001, learning_rate=0.001, batch_size=400)
@@ -36,6 +39,7 @@ def test_loss():
     middle_losses = model.loss_history_train[(num_training_iters // 3): 2 * (num_training_iters // 3)] # loss history from second 1/3 of data 
     late_losses = model.loss_history_train[ 2 * (num_training_iters // 3):] #loss history from last 1/3 of data
 
+    #assert the training loss approaches 0 
     assert np.mean(early_losses) > np.mean(middle_losses) > np.mean(late_losses), "Your loss is not approaching 0!"
 
 def test_loss_calculation():
