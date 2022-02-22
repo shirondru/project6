@@ -23,6 +23,7 @@ def main():
         log_model.train_model(X_train, y_train, X_val, y_val)
         log_model.plot_loss_history()
         
+        
         """
     log_model = LogisticRegression(num_feats=6, max_iter=10000, tol=0.000001, learning_rate=0.001, batch_size=12)
     log_model.train_model(X_train, y_train, X_val, y_val)
