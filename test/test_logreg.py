@@ -55,7 +55,7 @@ def test_loss_calculation():
     lin_model = LogisticRegression(num_feats=2)
     y = np.array([1,1,0])
     m = X.shape[0]
-    lin_model.W = np.array([2.94,1.03,0.65])
+    lin_model.W = np.array([2.94,1.03,0.65]) #manually initialize W
 
     y_pred = lin_model.make_prediction(X)
     model_loss_val = lin_model.loss_function(X,y)
@@ -77,7 +77,8 @@ def test_loss_calculation():
 def test_grad_calc():
     """
     Test the self.calculate_gradient method performs correct calculations by comparing it's output to my manual calculations for a simple dataset with
-    manually initialized parameters. Also compare it to the output from a non-vectorized calculation. 
+    manually initialized parameters. Also compare it to the output from a non-vectorized calculation. Assert all 3 values are identical to ensure gradient calculation is correct
+    Here, gradient is calculated on a manually defined set of parameters (W)
     """
 
     X = np.array([[0.4,0.3,1],
@@ -94,19 +95,19 @@ def test_grad_calc():
     grad_component = []
     for obs in range(X.shape[0]):
         grad_component.append((y[obs] - y_pred[obs]) * X[obs]) #y-y_pred is a scalar here
-    grad = -np.sum(grad_component,axis = 0)/m #
+    grad = -np.sum(grad_component,axis = 0)/m #gradient result via calculation in a non vectorized way
 
 
-    manual_grad = np.array([0.04059727, 0.1859726 , 0.21599574])
+    manual_grad = np.array([0.04059727, 0.1859726 , 0.21599574]) #gradient results by manual calculation
 
     assert np.allclose(model_grad,grad,manual_grad), "Your gradient is not being calculated properly!"
 
 def test_update_W():
     """
     This test tests that the parameters in self.W get updated properly throughout gradient descent. Because the initialization of self.W will be
-    controlled by the random seed, the hyperparameters are fixed, and the calculations of the gradients, predictions,  and loss functions have been tested, 
-    the self.W should be updated in a reproducible/expected manner. Here, I assert self.W is being updated properly throughout gradient descent by testing that the final values of
-    self.W are different from the initial set of self.W values, and that they are the same as the hardcoded expected values. As long as nothing has changed in the calculation of the gradient, predictions, or loss functions, or 
+    controlled by the random seed, the hyperparameters are fixed, and the calculations of the gradients, predictions,  and loss functions have all been tested to work properly, 
+     self.W should be updated in a reproducible/expected manner throughout gradient descent. Here, I assert self.W is being updated properly throughout gradient descent by testing that the final values of
+    self.W are different from the initial set of self.W values, and that the final values are the same as what is expected. As long as nothing has changed in the calculation of the gradient, predictions, or loss functions, or 
     that nothing has changed in the gradient descent code or any of the hyperparameters or random seed, this should be true.
     """
     X_train, X_test, y_train, y_test = loadDataset(split_percent = 0.8)
@@ -114,7 +115,9 @@ def test_update_W():
     init_w = lin_model.W
     lin_model.train_model(X_train, y_train, X_test, y_test)
     final_w = lin_model.W
-    expected_final_w = np.array([ 0.89807518,  0.66200367,  1.06751873,  1.52302986, -0.23415337, -0.06909126,  1.36745666])
+    expected_final_w = np.array([ 0.89807518,  0.66200367,  1.06751873,  1.52302986, -0.23415337, -0.06909126,  1.36745666]) #expected final set of W parameters given the random seed and hyperparamters being fixed
+    
+    #test final set of parameters are different than the initial set of parameters, and test that final set of parameters are same as what is expected, given the random seed and hyperparameters being fixed
     assert (not np.allclose(init_w, final_w)) and np.allclose(final_w,expected_final_w), "Your final W values are not as expected"
 
 def test_predict_calculation():
@@ -136,17 +139,13 @@ def test_predict_calculation():
     assert np.allclose(model_y_pred,manually_calc_pred), "Class Predictions are not being calculated as expected!"
 
 def test_predict():
-    # Check that self.W is being updated as expected
-    # and produces reasonable estimates for NSCLC classification
-
-    # Check accuracy of model after training
 
     """
-    Because a seed is set, hyperparameters fixed, and the initialization of W is also set, all predictions for a given dataset should be reproducible.
-    Additionally, beacase the gradient, loss, and prediction functions are tested to be calculated properly, the predictions for a given dataset should also have an expected value.
+    Because a seed is set, hyperparameters fixed, and the initialization of W is also set, all predictions for a given dataset should be reproducible under the same conditions.
+    Additionally, because the gradient, loss, and prediction functions are tested to be calculated properly, the predictions for a given dataset should also have an expected value.
     Here, I test the classification accuracy of the logistic regression model on the NSCLC dataset is the expected value.
 
-    ** This also tests that the algorithm is able to make good predictions, as this is expected to generate somewhat high classification accuracy **
+    ** This also tests that the algorithm is able to make good predictions, as the model is expected to generate somewhat high classification accuracy on this dataset**
     """
 
     X_train, X_test, y_train, y_test = loadDataset(split_percent = 0.8)
@@ -157,6 +156,8 @@ def test_predict():
     y_pred[y_pred > 0.5] = 1
     y_pred[y_pred <= 0.5] = 0
     accuracy = sum(y_pred == y_test)/len(y_test)
+
+    #test predictions are as expected (and good)
     assert accuracy == 0.795, "Accuracy Score is Different than Expeted!"
 
 
