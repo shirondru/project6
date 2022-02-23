@@ -45,7 +45,12 @@ class BaseRegressor():
             np.random.shuffle(shuffle_arr)
             X_train = shuffle_arr[:, :-1]
             y_train = shuffle_arr[:, -1].flatten()
-            num_batches = int(X_train.shape[0]/self.batch_size) + 1
+
+            #if batch size == 1 (SGD), adding 1 to end of num_batches will cause an error
+            if self.batch_size != 1:
+                num_batches = int(X_train.shape[0]/self.batch_size) + 1
+            else:
+                num_batches = int(X_train.shape[0]/self.batch_size)
             X_batch = np.array_split(X_train, num_batches)
             y_batch = np.array_split(y_train, num_batches)
             # Generating list to save the param updates per batch
@@ -93,7 +98,7 @@ class BaseRegressor():
         axs[0].set_ylabel('Train Loss')
         axs[1].set_ylabel('Val Loss')
         fig.tight_layout()
-        plt.show()
+        plt.show() #for viz on the command line
         
 
 # import required modules
